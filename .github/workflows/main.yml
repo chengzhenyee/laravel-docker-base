@@ -24,11 +24,29 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Remove old docker engine 
+        run: sudo apt-get remove docker docker-engine docker.io containerd runc
+      - name: Install latest docker engine
+        run: |
+          apt-get update && \
+          sudo apt-get install \
+          ca-certificates \
+          curl \
+          gnupg \
+          lsb-release && \
+          sudo mkdir -p /etc/apt/keyrings && \
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+          echo \
+          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+          sudo apt-get update && \
+          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v2
       - uses: docker/setup-buildx-action@v2
-            
+
       # Configure AWS credentials
       - uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -39,6 +57,8 @@ jobs:
       - name: Login to AWS ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
 
       # - name: Build, tag, and push image to Amazon ECR
       - name: Docker Build and Push
