@@ -26,6 +26,7 @@ jobs:
     steps:
       - name: Update libseccomp
         run: |
+          sudo apt update && sudo apt install libtool && \
           cd ~/ && \
           git clone https://github.com/seccomp/libseccomp.git libseccomp && cd libseccomp && \
           autoconf && \
