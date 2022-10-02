@@ -33,7 +33,7 @@ jobs:
           cd libseccomp-2.5.4 && \
           ./configure && \
           make V=1 && \
-          make install
+          sudo make install
       - name: Current docker version
         run: docker --version
       - name: Remove old docker engine 
