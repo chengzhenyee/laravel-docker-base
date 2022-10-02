@@ -29,7 +29,7 @@ jobs:
           sudo apt update && sudo apt install libtool && \
           cd ~/ && \
           git clone https://github.com/seccomp/libseccomp.git libseccomp && cd libseccomp && \
-          autoconf && \
+          autoconf -i && \
           ./configure && \
           make V=1 && \
           make install
