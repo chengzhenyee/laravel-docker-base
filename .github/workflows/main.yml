@@ -28,6 +28,7 @@ jobs:
         run: |
           cd ~/ && \
           git clone https://github.com/seccomp/libseccomp.git libseccomp && cd libseccomp && \
+          autoconf && \
           ./configure && \
           make V=1 && \
           make install
