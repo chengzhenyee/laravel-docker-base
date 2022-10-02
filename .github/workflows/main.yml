@@ -29,9 +29,9 @@ jobs:
           role-to-assume: arn:aws:iam::571461279982:role/GithubActionsRole
           aws-region: ap-southeast-1
           
-      # Login to AWS ECR
-      - id: login-ecr
-      - uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
       # - name: Build, tag, and push image to Amazon ECR
       - name: Docker Build
