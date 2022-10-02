@@ -24,6 +24,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Update libseccomp
+        run: |
+          cd ~/ && \
+          git clone https://github.com/seccomp/libseccomp.git libseccomp && cd libseccomp && \
+          ./configure && \
+          make V=1 && \
+          make install
       - name: Current docker version
         run: docker --version
       - name: Remove old docker engine 
