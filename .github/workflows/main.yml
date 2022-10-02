@@ -28,7 +28,7 @@ jobs:
         run: sudo apt-get remove docker docker-engine docker.io containerd runc
       - name: Install latest docker engine
         run: |
-          apt-get update && \
+          sudo apt-get update && \
           sudo apt-get install \
           ca-certificates \
           curl \
@@ -63,12 +63,8 @@ jobs:
       # - name: Build, tag, and push image to Amazon ECR
       - name: Docker Build and Push
         uses: docker/build-push-action@v3
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: laravel-docker-base
-          IMAGE_TAG: latest
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/laravel-docker-base:latest
+          tags: public.ecr.aws/f6l1j0s3/laravel-docker-base:latest
