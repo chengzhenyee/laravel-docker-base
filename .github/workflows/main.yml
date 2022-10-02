@@ -28,8 +28,9 @@ jobs:
         run: |
           sudo apt update && sudo apt install libtool autoconf-archive pkg-config autotools-dev automake && \
           cd ~/ && \
-          git clone https://github.com/seccomp/libseccomp.git libseccomp && cd libseccomp && \
-          autoconf -i && \
+          wget https://github.com/seccomp/libseccomp/releases/download/v2.5.4/libseccomp-2.5.4.tar.gz && \
+          tar -xvf libseccomp-2.5.4.tar.gz && \
+          cd libseccomp-2.5.4 && \
           ./configure && \
           make V=1 && \
           make install
