@@ -52,5 +52,3 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
 # Copy configuration files
 COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
