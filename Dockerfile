@@ -1,35 +1,33 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.1-fpm
 
 WORKDIR /app
 
-RUN apk update; \
-    apk add --no-cache \
-        libmemcached-dev \
-        zlib-dev \
-        libpq-dev \
-        jpeg-dev \
-        libjpeg-turbo-dev \
-        libpng-dev \
-        freetype-dev \
-        libwebp-dev \
-        libxpm-dev \
-        libmcrypt-dev \
-        oniguruma-dev \
-        libedit \
-        pcre2 \
-        nodejs \
-        npm \
-        nginx \
-        supervisor;
+RUN set -eux; \
+    apt-get update; \
+    apt-get upgrade -y; \
+    apt-get install -y --no-install-recommends \
+            supervisor \
+            nginx \
+            libmemcached-dev \
+            libz-dev \
+            libpq-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libfreetype6-dev \
+            libssl-dev \
+            libwebp-dev \
+            libxpm-dev \
+            libmcrypt-dev \
+            libonig-dev; \
+    rm -rf /var/lib/apt/lists/*
 
-# Install the PHP pdo_mysql extention
-RUN docker-php-ext-install pdo_mysql; \
-    # Install the PHP pdo_pgsql extention
-    docker-php-ext-install pdo_pgsql; \
-    # Install PHP bcmath extension
-    docker-php-ext-install bcmath; \
-    # Install PHP opcache extension
-    docker-php-ext-install opcache; \
+RUN set -eux; \
+    # Install the PHP extensions
+    docker-php-ext-install \
+            opcache \
+            pdo_mysql \
+            pdo_pgsql \
+            bcmath; \
     # Install the PHP gd library
     docker-php-ext-configure gd \
             --prefix=/usr \
@@ -47,10 +45,12 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php -r "unlink('composer-setup.php');" && \
     mv composer.phar /usr/local/bin/composer;
 
+# Install NodeJS v16 LTS
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt install nodejs -y;
+
 # Copy configuration files
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-COPY docker/supervisord.conf /etc/supervisord.conf
 
-ENTRYPOINT [ "/app/docker/entrypoint.sh" ]
-
-EXPOSE 80
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
