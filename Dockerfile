@@ -20,7 +20,9 @@ RUN set -eux; \
             libwebp-dev \
             libxpm-dev \
             libmcrypt-dev \
-            libonig-dev; \
+            libonig-dev \
+            zip \
+            unzip; \
     rm -rf /var/lib/apt/lists/*
 
 # Install the PHP extensions
@@ -52,5 +54,5 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
 
 # Copy configuration files
 COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
-COPY docker/nginx.conf /etc/nginx/http.d/default.conf
-COPY docker/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+COPY docker/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
