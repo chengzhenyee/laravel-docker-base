@@ -1,5 +1,7 @@
 FROM php:8.1-fpm
 
+LABEL maintainer="Cheng Zhen Yee <chengzhenyee@gmail.com>"
+
 WORKDIR /app
 
 RUN set -eux; \
@@ -21,9 +23,8 @@ RUN set -eux; \
             libonig-dev; \
     rm -rf /var/lib/apt/lists/*
 
-RUN set -eux; \
-    # Install the PHP extensions
-    docker-php-ext-install \
+# Install the PHP extensions
+RUN docker-php-ext-install \
             opcache \
             pdo_mysql \
             pdo_pgsql \
@@ -52,3 +53,4 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
 # Copy configuration files
 COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+COPY docker/www.conf /usr/local/etc/php-fpm.d/www.conf
