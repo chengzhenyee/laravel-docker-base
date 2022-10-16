@@ -53,6 +53,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt install nodejs -y;
 
 # Copy configuration files
-COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
-COPY docker/nginx.conf /etc/nginx/sites-available/default
-COPY docker/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY nginx.conf /etc/nginx/sites-available/default
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-docker.conf
